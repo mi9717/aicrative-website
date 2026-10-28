@@ -10,20 +10,21 @@
     <title>AICRATIVE | Creative Studio</title>
     <style>
       :root {
-        --bg: #09111f;
-        --bg-2: #101b2d;
+        --bg: #060d1a;
+        --bg-2: #0d1830;
         --panel: rgba(17, 25, 40, 0.82);
         --panel-strong: rgba(20, 31, 51, 0.96);
         --panel-soft: rgba(255, 255, 255, 0.04);
-        --border: rgba(255, 255, 255, 0.1);
-        --text: #ebf3ff;
-        --muted: #9fb3ce;
-        --accent: #7c9cff;
+        --border: rgba(153, 169, 255, 0.18);
+        --text: #edf4ff;
+        --muted: #a1b6d9;
+        --accent: #799aff;
         --accent-2: #57d8c6;
+        --accent-3: #8d79ff;
         --warning: #ffa857;
         --success: #57d9a3;
         --danger: #ff6b6b;
-        --shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
+        --shadow: 0 18px 40px rgba(3, 7, 18, 0.44);
       }
 
       * { box-sizing: border-box; }
@@ -32,7 +33,10 @@
         margin: 0;
         min-height: 100vh;
         font-family: Inter, "Segoe UI", sans-serif;
-        background: radial-gradient(circle at top, #11213b 0%, var(--bg) 38%, #050b13 100%);
+        background:
+          radial-gradient(circle at 15% 0%, rgba(122, 103, 255, 0.28), transparent 28%),
+          radial-gradient(circle at 85% 8%, rgba(59, 130, 246, 0.24), transparent 26%),
+          linear-gradient(180deg, #091322 0%, #040b16 38%, #060d1a 100%);
         color: var(--text);
       }
       body::before {
@@ -40,30 +44,258 @@
         position: fixed;
         inset: 0;
         pointer-events: none;
-        background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-        background-size: 24px 24px;
-        mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        background-image: linear-gradient(rgba(255,255,255,0.027) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.027) 1px, transparent 1px);
+        background-size: 28px 28px;
+        mask-image: radial-gradient(circle at center, black 35%, transparent 100%);
       }
       a { color: var(--accent-2); text-decoration: none; }
       button, input, select, textarea { font: inherit; }
-      .app { width: min(1280px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 56px; }
+      .app {
+        width: min(1280px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 56px;
+      }
       .topbar {
-        display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 20px; border: 1px solid var(--border); background: rgba(18, 28, 44, 0.8); border-radius: 18px; box-shadow: var(--shadow); backdrop-filter: blur(12px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 18px 20px;
+        border: 1px solid var(--border);
+        background: rgba(11, 18, 31, 0.72);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
       }
-      .brand { display: flex; align-items: center; gap: 14px; }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
       .logo {
-        width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #07111d; font-weight: 900; box-shadow: 0 10px 22px rgba(124, 156, 255, 0.4);
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #8cc9ff, #7d9dff, #a480ff);
+        color: #0a1221;
+        font-weight: 900;
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
       }
-      .brand h1 { margin: 0; font-size: 1.15rem; letter-spacing: 0.08em; text-transform: uppercase; }
-      .topbar-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+      .brand h1 {
+        margin: 0;
+        font-size: 1.1rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .brand .muted {
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+      .main-nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 22px;
+        flex-wrap: wrap;
+      }
+      .main-nav a {
+        font-size: 0.88rem;
+        color: rgba(237, 244, 255, 0.7);
+        transition: color 0.2s ease, opacity 0.2s ease;
+      }
+      .main-nav a:hover,
+      .main-nav a.active {
+        color: var(--text);
+      }
+      .topbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
       .btn {
-        border: 1px solid var(--border); border-radius: 12px; background: rgba(255,255,255,0.03); color: var(--text); padding: 10px 14px; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: rgba(255,255,255,0.03);
+        color: var(--text);
+        padding: 10px 14px;
+        cursor: pointer;
+        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
       }
-      .btn:hover { transform: translateY(-1px); border-color: rgba(124, 156, 255, 0.5); }
-      .btn.primary { background: linear-gradient(135deg, var(--accent), #a889ff); border-color: transparent; color: #081420; font-weight: 700; }
-      .btn.success { background: linear-gradient(135deg, var(--success), #86e6c6); color: #071d17; font-weight: 700; }
-      .btn.danger { background: linear-gradient(135deg, #ff8f9e, var(--danger)); color: #200b0d; font-weight: 700; }
-      .dashboard { display: grid; grid-template-columns: repeat(4, minmax(180px, 1fr)); gap: 16px; margin-top: 20px; }
+      .btn:hover {
+        transform: translateY(-1px);
+        border-color: rgba(124, 156, 255, 0.6);
+      }
+      .btn.primary {
+        background: linear-gradient(135deg, rgba(124, 156, 255, 0.92), rgba(157, 118, 255, 0.9));
+        border-color: transparent;
+        color: #0b1322;
+        font-weight: 800;
+      }
+      .btn.success {
+        background: linear-gradient(135deg, rgba(87, 217, 163, 0.9), rgba(119, 196, 166, 0.9));
+        border-color: transparent;
+        color: #071b15;
+        font-weight: 800;
+      }
+      .btn.danger {
+        background: linear-gradient(135deg, rgba(255, 143, 158, 0.9), rgba(255, 107, 107, 0.8));
+        border-color: transparent;
+        color: #1d0b11;
+        font-weight: 800;
+      }
+      .btn.ghost {
+        background: rgba(255,255,255,0.02);
+        color: var(--text);
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 24px;
+        align-items: center;
+        margin-top: 24px;
+        padding: 10px 4px 0;
+      }
+      .hero-copy {
+        padding: 8px 0;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 12px;
+        margin: 0 0 16px;
+        border-radius: 999px;
+        background: rgba(124, 156, 255, 0.1);
+        border: 1px solid rgba(124, 156, 255, 0.25);
+        color: #d7e5ff;
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .hero-copy h2 {
+        margin: 0;
+        font-size: clamp(2.8rem, 5vw, 5.3rem);
+        line-height: 0.97;
+        letter-spacing: -0.08em;
+        font-weight: 900;
+      }
+      .hero-copy .lead {
+        margin-top: 16px;
+        max-width: 620px;
+        color: var(--muted);
+        font-size: 1.04rem;
+        line-height: 1.7;
+      }
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+      }
+      .hero-actions .btn {
+        padding-inline: 18px;
+      }
+      .stats-inline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+      }
+      .stat-pill {
+        background: linear-gradient(180deg, rgba(26, 34, 58, 0.8), rgba(17, 24, 38, 0.7));
+        border: 1px solid rgba(148, 164, 255, 0.2);
+        border-radius: 999px;
+        padding: 9px 14px;
+        color: var(--muted);
+        font-size: 0.82rem;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+      }
+      .stat-pill strong {
+        color: var(--text);
+        font-weight: 800;
+        margin-right: 6px;
+      }
+      .hero-visual {
+        position: relative;
+        min-height: 470px;
+        border: 1px solid rgba(150, 165, 255, 0.2);
+        background: linear-gradient(180deg, rgba(18, 31, 52, 0.9), rgba(12, 20, 35, 0.9));
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+      .hero-visual::before {
+        content: "";
+        position: absolute;
+        left: 10%;
+        right: 10%;
+        top: 10%;
+        height: 70%;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(133,111,255,0.56), rgba(60,130,246,0.14) 30%, transparent 64%);
+        filter: blur(18px);
+      }
+      .orb-art {
+        position: absolute;
+        inset: 38px 34px 48px;
+        border-radius: 26px;
+        background:
+          radial-gradient(circle at 25% 20%, rgba(255,255,255,0.82), rgba(255,255,255,0.08) 14%, transparent 28%),
+          linear-gradient(160deg, rgba(170, 109, 255, 0.45), rgba(99, 194, 255, 0.24), rgba(10,18,31,0.05));
+        box-shadow: inset 0 0 24px rgba(255,255,255,0.08), inset 0 -30px 40px rgba(0,0,0,0.18);
+      }
+      .orb-art::before {
+        content: "";
+        position: absolute;
+        inset: 16% 8% 7% 16%;
+        border-radius: 42% 58% 54% 46% / 38% 40% 60% 62%;
+        background:
+          radial-gradient(circle at 35% 38%, rgba(255,255,255,0.94), rgba(194, 240, 255, 0.68) 18%, rgba(187, 200, 255, 0.14) 38%, rgba(10,18,31,0.38) 64%, rgba(0,0,0,0.46) 100%),
+          linear-gradient(180deg, rgba(255,255,255,0.05), rgba(13,19,31,0.04));
+        box-shadow: 0 0 30px rgba(115, 160, 255, 0.3), inset -18px -16px 30px rgba(0,0,0,0.38), inset 12px 12px 28px rgba(255,255,255,0.22);
+        transform: rotate(-8deg);
+      }
+      .orb-art::after {
+        content: "";
+        position: absolute;
+        left: 16%;
+        right: 18%;
+        bottom: 8%;
+        height: 28%;
+        border-radius: 35% 65% 50% 50%;
+        background: linear-gradient(180deg, rgba(207, 238, 255, 0.28), rgba(96, 123, 255, 0.12), rgba(10,16,22,0.34));
+        filter: blur(8px);
+        transform: rotate(8deg);
+      }
+      .visual-badges {
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        bottom: 18px;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .visual-badge {
+        min-width: 110px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(12, 20, 32, 0.58);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: var(--muted);
+        backdrop-filter: blur(10px);
+        font-size: 0.72rem;
+      }
+      .visual-badge strong {
+        display: block;
+        color: var(--text);
+        font-size: 0.8rem;
+      }
+      .dashboard { display: grid; grid-template-columns: repeat(4, minmax(180px, 1fr)); gap: 16px; margin-top: 24px; }
       .card { border-radius: 18px; background: linear-gradient(180deg, rgba(17, 25, 40, 0.9), rgba(13, 19, 31, 0.96)); border: 1px solid var(--border); box-shadow: var(--shadow); }
       .stat-card { padding: 18px 20px; position: relative; overflow: hidden; }
       .stat-card::after { content: ""; position: absolute; inset: 0 auto auto 0; width: 80px; height: 80px; background: radial-gradient(circle, rgba(124, 156, 255, 0.22), transparent 68%); }
@@ -78,10 +310,20 @@
       .field.full { grid-column: 1 / -1; }
       label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
       input, select, textarea { width: 100%; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); border-radius: 12px; color: var(--text); padding: 11px 12px; resize: vertical; }
+      input:focus, select:focus, textarea:focus { outline: 2px solid rgba(124, 156, 255, 0.35); border-color: rgba(124, 156, 255, 0.45); }
       textarea { min-height: 120px; }
       .inline-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
       .output-box {
-        margin-top: 16px; background: rgba(7,15,24,0.7); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 14px 12px; color: #dfeaff; min-height: 140px; line-height: 1.6; white-space: pre-wrap;
+        margin-top: 16px;
+        background: rgba(7,15,24,0.7);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px;
+        padding: 14px 14px 12px;
+        color: #dfeaff;
+        min-height: 140px;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        word-break: break-word;
       }
       .scene-form { border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); border-radius: 16px; padding: 18px; margin-bottom: 18px; }
       .section-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
@@ -89,7 +331,7 @@
       .scene-item { display: grid; grid-template-columns: 1fr auto; gap: 16px; padding: 16px; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; background: rgba(255,255,255,0.02); }
       .scene-item h3 { margin: 0 0 6px; }
       .scene-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
-      .chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); border-radius: 999px; padding: 6px 10px; font-size: 0.76rem; color: var(--muted); }
+      .chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); border-radius: 999px; padding: 6px 10px; font-size: 0.72rem; color: var(--muted); }
       .scene-actions { display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
       .tiny { padding: 8px 10px; font-size: 0.82rem; }
       .validator-output { display: grid; gap: 12px; margin-top: 8px; }
@@ -99,10 +341,24 @@
       .validator-result .status { font-weight: 700; margin-bottom: 10px; }
       .validator-list { padding-left: 20px; margin: 0; color: var(--muted); line-height: 1.7; }
       .muted { color: var(--muted); }
-      .toast { position: fixed; right: 20px; bottom: 20px; background: rgba(14,19,26,0.96); border: 1px solid var(--border); color: var(--text); padding: 12px 16px; border-radius: 12px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity 0.2s ease, transform 0.2s ease; z-index: 1000; }
+      .toast { position: fixed; right: 20px; bottom: 20px; background: rgba(14,19,26,0.96); border: 1px solid var(--border); color: var(--text); padding: 12px 16px; border-radius: 12px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity 0.2s ease, transform 0.2s ease; }
       .toast.visible { opacity: 1; transform: translateY(0); }
       .empty-state { padding: 20px; border: 1px dashed rgba(255,255,255,0.12); border-radius: 14px; color: var(--muted); background: rgba(255,255,255,0.01); }
-      @media (max-width: 920px) { .dashboard, .grid-2, .form-grid { grid-template-columns: 1fr; } .topbar { flex-direction: column; align-items: stretch; } }
+      @media (max-width: 920px) {
+        .topbar { flex-direction: column; align-items: stretch; }
+        .main-nav { justify-content: center; }
+        .hero { grid-template-columns: 1fr; }
+        .dashboard, .grid-2, .form-grid { grid-template-columns: 1fr; }
+        .scene-item { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 560px) {
+        .app { width: min(100% - 20px, 1280px); }
+        .topbar { padding: 16px 14px; }
+        .main-nav { gap: 10px 18px; }
+        .hero-copy h2 { font-size: 2.5rem; }
+        .topbar-actions { justify-content: stretch; }
+        .topbar-actions .btn { flex: 1 1 140px; }
+      }
     </style>
   </head>
   <body>
@@ -115,12 +371,45 @@
             <div class="muted" id="projectNameLabel">Creative Studio MVP</div>
           </div>
         </div>
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="#" class="active">Home</a>
+          <a href="#">Explore</a>
+          <a href="#">Studio</a>
+          <a href="#">Characters</a>
+          <a href="#">Scenes</a>
+          <a href="#">News</a>
+        </nav>
         <div class="topbar-actions">
-          <button class="btn primary" id="saveProjectBtn">Simpan Proyek</button>
-          <button class="btn" id="resetProjectBtn">Reset Demo</button>
-          <button class="btn" id="exportJsonBtn">Ekspor JSON</button>
+          <button class="btn ghost" type="button">Search</button>
+          <button class="btn primary" id="saveProjectBtn" type="button">Simpan Proyek</button>
+          <button class="btn" id="resetProjectBtn" type="button">Reset Demo</button>
+          <button class="btn" id="exportJsonBtn" type="button">Ekspor JSON</button>
         </div>
       </header>
+
+      <section class="hero" aria-label="AICRATIVE creative overview">
+        <div class="hero-copy">
+          <p class="eyebrow">AI Creative Studio</p>
+          <h2>Design, generate, and refine your next cinematic world.</h2>
+          <p class="lead">Build consistent characters, layered scenes, and polished prompt systems from one premium creative workspace built for story-driven AI creation.</p>
+          <div class="hero-actions">
+            <a href="#generator-workspace" class="btn primary">Launch Studio</a>
+            <button class="btn ghost" type="button">Watch Demo</button>
+          </div>
+          <div class="stats-inline" aria-label="Creative metrics">
+            <div class="stat-pill"><strong>27k+</strong> Projects</div>
+            <div class="stat-pill"><strong>20k+</strong> Characters</div>
+            <div class="stat-pill"><strong>7k+</strong> Scenes</div>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="orb-art"></div>
+          <div class="visual-badges">
+            <div class="visual-badge"><strong>Ending</strong> 3D Concept</div>
+            <div class="visual-badge"><strong>Highest bid</strong> 32.4 ETH</div>
+          </div>
+        </div>
+      </section>
 
       <section class="dashboard" aria-label="Dashboard overview">
         <div class="card stat-card">
@@ -141,7 +430,7 @@
         </div>
       </section>
 
-      <main class="layout">
+      <main class="layout" id="generator-workspace">
         <section class="grid-2">
           <article class="card panel" aria-labelledby="image-generator-title">
             <h2 id="image-generator-title">Universal Image Prompt Generator</h2>
@@ -357,9 +646,9 @@
           },
           generated: { image: '', video: '' },
           scenes: [
-            { id: 1, title: 'Pintu Desa', location: 'Desa Lembah Hijau', mood: 'Senang dan optimistis', shot: 'Wide cinematic', description: 'Ari berjalan di jalan desa saat matahari terbit, menyapa warga dan menyiapkan langkah petualangannya.', prompt: 'Ari berjalan di jalan desa saat pagi, pose tenang dan penuh harapan, atmosfer hangat, wide cinematic shot, gaya 3D animation.' },
-            { id: 2, title: 'Tebing Bunga', location: 'Tebing bukit dengan bunga melati', mood: 'Khusuk dan penuh tekad', shot: 'Medium tracking', description: 'Ari berhenti di tebing untuk mengamati pemandangan, menimbang keputusan besar yang akan membawa perubahan.', prompt: 'Ari berdiri di tebing dengan bunga melati, ekspresi tenang namun bersiap, medium tracking shot, soft golden hour, cinematic fantasy.' },
-            { id: 3, title: 'Rasa Percaya Diri', location: 'Sore hari di jalan utama desa', mood: 'Heroik dan energik', shot: 'Close-up motion', description: 'Ari berlari dengan keyakinan menghadapi hari baru, menempatkan dirinya sebagai pendukung desa yang kuat.', prompt: 'Ari berlari di jalan utama desa dengan wajah penuh semangat, close-up motion, cinematic lighting, heroism with warm palette.' }
+            { id: 1, title: 'Pintu Desa', location: 'Desa Lembah Hijau', mood: 'Senang dan optimistis', shot: 'Wide cinematic', description: 'Ari berjalan di jalan desa saat matahari terbit, menyapa penduduk dengan senyum hangat dan tatapan penuh harapan.', prompt: 'Ari berjalan di jalan desa saat matahari terbit, natural cinematic lighting, warm atmosphere, gentle movement, detailed environment.' },
+            { id: 2, title: 'Tebing Bunga', location: 'Tebing bukit dengan bunga melati', mood: 'Khusuk dan penuh tekad', shot: 'Medium tracking', description: 'Ari berhenti di tebing untuk mengamati pemandangan, membayangkan masa depan desanya dengan keyakinan baru.', prompt: 'Ari berdiri di tebing dengan bunga melati, cinematic framing, soft morning breeze, hopeful mood, detailed clothing and environment.' },
+            { id: 3, title: 'Rasa Percaya Diri', location: 'Sore hari di jalan utama desa', mood: 'Heroik dan energik', shot: 'Close-up motion', description: 'Ari berlari dengan keyakinan menghadapi tantangan baru, dikelilingi cahaya keemasan dari senja.', prompt: 'Ari berlari dengan penuh percaya diri di jalan utama desa, golden hour light, dynamic motion, expressive face, dramatic storytelling composition.' }
           ]
         };
 
