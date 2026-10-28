@@ -1,1 +1,769 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="AICRATIVE creative studio dashboard for image and video prompt generation, character bible, scene management, and project export."
+    />
+    <title>AICRATIVE | Creative Studio</title>
+    <style>
+      :root {
+        --bg: #09111f;
+        --bg-2: #101b2d;
+        --panel: rgba(17, 25, 40, 0.82);
+        --panel-strong: rgba(20, 31, 51, 0.96);
+        --panel-soft: rgba(255, 255, 255, 0.04);
+        --border: rgba(255, 255, 255, 0.1);
+        --text: #ebf3ff;
+        --muted: #9fb3ce;
+        --accent: #7c9cff;
+        --accent-2: #57d8c6;
+        --warning: #ffa857;
+        --success: #57d9a3;
+        --danger: #ff6b6b;
+        --shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
+      }
 
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Inter, "Segoe UI", sans-serif;
+        background: radial-gradient(circle at top, #11213b 0%, var(--bg) 38%, #050b13 100%);
+        color: var(--text);
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+        background-size: 24px 24px;
+        mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+      }
+      a { color: var(--accent-2); text-decoration: none; }
+      button, input, select, textarea { font: inherit; }
+      .app { width: min(1280px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 56px; }
+      .topbar {
+        display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 20px; border: 1px solid var(--border); background: rgba(18, 28, 44, 0.8); border-radius: 18px; box-shadow: var(--shadow); backdrop-filter: blur(12px);
+      }
+      .brand { display: flex; align-items: center; gap: 14px; }
+      .logo {
+        width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #07111d; font-weight: 900; box-shadow: 0 10px 22px rgba(124, 156, 255, 0.4);
+      }
+      .brand h1 { margin: 0; font-size: 1.15rem; letter-spacing: 0.08em; text-transform: uppercase; }
+      .topbar-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+      .btn {
+        border: 1px solid var(--border); border-radius: 12px; background: rgba(255,255,255,0.03); color: var(--text); padding: 10px 14px; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      }
+      .btn:hover { transform: translateY(-1px); border-color: rgba(124, 156, 255, 0.5); }
+      .btn.primary { background: linear-gradient(135deg, var(--accent), #a889ff); border-color: transparent; color: #081420; font-weight: 700; }
+      .btn.success { background: linear-gradient(135deg, var(--success), #86e6c6); color: #071d17; font-weight: 700; }
+      .btn.danger { background: linear-gradient(135deg, #ff8f9e, var(--danger)); color: #200b0d; font-weight: 700; }
+      .dashboard { display: grid; grid-template-columns: repeat(4, minmax(180px, 1fr)); gap: 16px; margin-top: 20px; }
+      .card { border-radius: 18px; background: linear-gradient(180deg, rgba(17, 25, 40, 0.9), rgba(13, 19, 31, 0.96)); border: 1px solid var(--border); box-shadow: var(--shadow); }
+      .stat-card { padding: 18px 20px; position: relative; overflow: hidden; }
+      .stat-card::after { content: ""; position: absolute; inset: 0 auto auto 0; width: 80px; height: 80px; background: radial-gradient(circle, rgba(124, 156, 255, 0.22), transparent 68%); }
+      .stat-card .label { color: var(--muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; }
+      .stat-card .value { margin-top: 10px; font-size: clamp(1.6rem, 2vw, 2.2rem); font-weight: 800; }
+      .layout { margin-top: 22px; display: grid; gap: 20px; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+      .panel { padding: 20px; }
+      .panel h2 { margin: 0 0 16px; font-size: 1.12rem; }
+      .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      .field { display: flex; flex-direction: column; gap: 8px; }
+      .field.full { grid-column: 1 / -1; }
+      label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+      input, select, textarea { width: 100%; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); border-radius: 12px; color: var(--text); padding: 11px 12px; resize: vertical; }
+      textarea { min-height: 120px; }
+      .inline-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+      .output-box {
+        margin-top: 16px; background: rgba(7,15,24,0.7); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 14px 12px; color: #dfeaff; min-height: 140px; line-height: 1.6; white-space: pre-wrap;
+      }
+      .scene-form { border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); border-radius: 16px; padding: 18px; margin-bottom: 18px; }
+      .section-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+      .scene-list { display: grid; gap: 12px; }
+      .scene-item { display: grid; grid-template-columns: 1fr auto; gap: 16px; padding: 16px; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; background: rgba(255,255,255,0.02); }
+      .scene-item h3 { margin: 0 0 6px; }
+      .scene-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+      .chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); border-radius: 999px; padding: 6px 10px; font-size: 0.76rem; color: var(--muted); }
+      .scene-actions { display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
+      .tiny { padding: 8px 10px; font-size: 0.82rem; }
+      .validator-output { display: grid; gap: 12px; margin-top: 8px; }
+      .validator-result { border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); padding: 14px; }
+      .validator-result.good { border-color: rgba(87, 217, 163, 0.35); }
+      .validator-result.warn { border-color: rgba(255, 168, 87, 0.35); }
+      .validator-result .status { font-weight: 700; margin-bottom: 10px; }
+      .validator-list { padding-left: 20px; margin: 0; color: var(--muted); line-height: 1.7; }
+      .muted { color: var(--muted); }
+      .toast { position: fixed; right: 20px; bottom: 20px; background: rgba(14,19,26,0.96); border: 1px solid var(--border); color: var(--text); padding: 12px 16px; border-radius: 12px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity 0.2s ease, transform 0.2s ease; z-index: 1000; }
+      .toast.visible { opacity: 1; transform: translateY(0); }
+      .empty-state { padding: 20px; border: 1px dashed rgba(255,255,255,0.12); border-radius: 14px; color: var(--muted); background: rgba(255,255,255,0.01); }
+      @media (max-width: 920px) { .dashboard, .grid-2, .form-grid { grid-template-columns: 1fr; } .topbar { flex-direction: column; align-items: stretch; } }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo">A</div>
+          <div>
+            <h1>AICRATIVE</h1>
+            <div class="muted" id="projectNameLabel">Creative Studio MVP</div>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn primary" id="saveProjectBtn">Simpan Proyek</button>
+          <button class="btn" id="resetProjectBtn">Reset Demo</button>
+          <button class="btn" id="exportJsonBtn">Ekspor JSON</button>
+        </div>
+      </header>
+
+      <section class="dashboard" aria-label="Dashboard overview">
+        <div class="card stat-card">
+          <div class="label">Proyek</div>
+          <div class="value" id="statProject">AICRATIVE</div>
+        </div>
+        <div class="card stat-card">
+          <div class="label">Karakter</div>
+          <div class="value" id="statCharacter">1</div>
+        </div>
+        <div class="card stat-card">
+          <div class="label">Scene</div>
+          <div class="value" id="statScene">3</div>
+        </div>
+        <div class="card stat-card">
+          <div class="label">Status</div>
+          <div class="value" id="statStatus">Ready</div>
+        </div>
+      </section>
+
+      <main class="layout">
+        <section class="grid-2">
+          <article class="card panel" aria-labelledby="image-generator-title">
+            <h2 id="image-generator-title">Universal Image Prompt Generator</h2>
+            <div class="form-grid">
+              <div class="field">
+                <label for="imageStyle">Gaya</label>
+                <select id="imageStyle">
+                  <option value="3D animation">3D animation</option>
+                  <option value="animasi anak-anak">animasi anak-anak</option>
+                  <option value="anime">anime</option>
+                  <option value="2D">2D</option>
+                  <option value="realistis">realistis</option>
+                  <option value="cinematic">cinematic</option>
+                  <option value="fantasy">fantasy</option>
+                  <option value="custom">custom</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="imageSubject">Subjek</label>
+                <input id="imageSubject" type="text" value="Seorang prajurit muda di desa yang terinspirasi oleh cahaya pagi" />
+              </div>
+              <div class="field full">
+                <label for="imageCustom">Custom style prompt (opsional)</label>
+                <input id="imageCustom" type="text" placeholder="Contoh: semi-realistic, watercolor, whimsical, storybook" />
+              </div>
+            </div>
+            <div class="inline-actions">
+              <button class="btn primary" id="generateImageBtn">Generate Prompt</button>
+              <button class="btn" id="copyImageBtn">Copy Prompt</button>
+            </div>
+            <div class="output-box" id="imagePromptOutput" aria-live="polite"></div>
+          </article>
+
+          <article class="card panel" aria-labelledby="video-generator-title">
+            <h2 id="video-generator-title">Universal Video Prompt Generator</h2>
+            <div class="form-grid">
+              <div class="field">
+                <label for="videoAction">Aksi</label>
+                <input id="videoAction" type="text" value="berlari melintasi jalan berdebu sambil menatap matahari terbenam" />
+              </div>
+              <div class="field">
+                <label for="videoExpression">Ekspresi</label>
+                <input id="videoExpression" type="text" value="tenang, penuh tekad, bersemangat" />
+              </div>
+              <div class="field">
+                <label for="videoCamera">Kamera</label>
+                <input id="videoCamera" type="text" value="tracking shot, low angle, wide cinematic frame" />
+              </div>
+              <div class="field">
+                <label for="videoDuration">Durasi</label>
+                <select id="videoDuration">
+                  <option value="5 detik">5 detik</option>
+                  <option value="8 detik" selected>8 detik</option>
+                  <option value="12 detik">12 detik</option>
+                  <option value="15 detik">15 detik</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="videoLighting">Pencahayaan</label>
+                <input id="videoLighting" type="text" value="golden hour, soft rim light, cinematic atmosphere" />
+              </div>
+              <div class="field">
+                <label for="videoContinuity">Kontinuitas</label>
+                <input id="videoContinuity" type="text" value="alkisah consistent movement and facial continuity across shots" />
+              </div>
+            </div>
+            <div class="inline-actions">
+              <button class="btn primary" id="generateVideoBtn">Generate Prompt</button>
+              <button class="btn" id="copyVideoBtn">Copy Prompt</button>
+            </div>
+            <div class="output-box" id="videoPromptOutput" aria-live="polite"></div>
+          </article>
+        </section>
+
+        <section class="grid-2">
+          <article class="card panel" aria-labelledby="character-bible-title">
+            <h2 id="character-bible-title">Character Bible</h2>
+            <div class="form-grid">
+              <div class="field">
+                <label for="characterName">Nama</label>
+                <input id="characterName" type="text" value="Ari Sunarya" />
+              </div>
+              <div class="field">
+                <label for="characterRole">Peran</label>
+                <input id="characterRole" type="text" value="Pahlawan muda desa" />
+              </div>
+              <div class="field">
+                <label for="characterAge">Usia</label>
+                <input id="characterAge" type="text" value="19" />
+              </div>
+              <div class="field">
+                <label for="characterTraits">Sifat</label>
+                <input id="characterTraits" type="text" value="ramah, tangguh, berdamai, penasaran" />
+              </div>
+              <div class="field full">
+                <label for="characterAppearance">Penampilan</label>
+                <textarea id="characterAppearance">Tinggi sedang, rambut hitam pendek, mata cokelat hangat, pakaian desa yang nyaman, dengan mantel cokelat tua dan sarung tangan sederhana.</textarea>
+              </div>
+              <div class="field full">
+                <label for="characterNotes">Catatan</label>
+                <textarea id="characterNotes">Ari adalah sosok yang selalu menolong orang lain, namun juga memikul rasa bertanggung jawab besar atas masa depan desanya.</textarea>
+              </div>
+            </div>
+            <div class="inline-actions">
+              <button class="btn primary" id="saveCharacterBtn">Simpan Karakter</button>
+            </div>
+          </article>
+
+          <article class="card panel" aria-labelledby="style-bible-title">
+            <h2 id="style-bible-title">Style Bible</h2>
+            <div class="form-grid">
+              <div class="field">
+                <label for="styleMood">Mood</label>
+                <input id="styleMood" type="text" value="hangat, heroik, optimistis" />
+              </div>
+              <div class="field">
+                <label for="stylePalette">Palette</label>
+                <input id="stylePalette" type="text" value="kuning emas, cerah, biru langit, tanah cokelat" />
+              </div>
+              <div class="field">
+                <label for="styleTypography">Typography</label>
+                <input id="styleTypography" type="text" value="clean modern serif, bold headings" />
+              </div>
+              <div class="field">
+                <label for="styleLighting">Lighting</label>
+                <input id="styleLighting" type="text" value="soft golden hour, volumetric glow" />
+              </div>
+              <div class="field full">
+                <label for="styleMaterials">Material & detail</label>
+                <textarea id="styleMaterials">Permukaan alami, tekstur kain, detail ringan pada lingkungan, fokus pada ekspresi karakter dan kedalaman pencahayaan cinematic.</textarea>
+              </div>
+            </div>
+            <div class="inline-actions">
+              <button class="btn primary" id="saveStyleBtn">Simpan Style</button>
+            </div>
+          </article>
+        </section>
+
+        <section class="card panel" aria-labelledby="scene-manager-title">
+          <div class="section-header">
+            <h2 id="scene-manager-title">Scene Manager</h2>
+            <button class="btn primary" id="addSceneBtn">Tambah Scene</button>
+          </div>
+
+          <form class="scene-form" id="sceneForm">
+            <div class="form-grid">
+              <div class="field">
+                <label for="sceneTitle">Judul</label>
+                <input id="sceneTitle" type="text" placeholder="Judul scene" />
+              </div>
+              <div class="field">
+                <label for="sceneLocation">Lokasi</label>
+                <input id="sceneLocation" type="text" placeholder="Lokasi" />
+              </div>
+              <div class="field">
+                <label for="sceneMood">Mood</label>
+                <input id="sceneMood" type="text" placeholder="Mood" />
+              </div>
+              <div class="field">
+                <label for="sceneShot">Shot</label>
+                <input id="sceneShot" type="text" placeholder="Wide, medium, close-up" />
+              </div>
+              <div class="field full">
+                <label for="sceneDescription">Deskripsi</label>
+                <textarea id="sceneDescription" placeholder="Deskripsi scene"></textarea>
+              </div>
+              <div class="field full">
+                <label for="scenePrompt">Prompt</label>
+                <textarea id="scenePrompt" placeholder="Prompt scene"></textarea>
+              </div>
+            </div>
+            <div class="inline-actions">
+              <button type="submit" class="btn success" id="saveSceneBtn">Simpan Scene</button>
+              <button type="button" class="btn" id="clearSceneBtn">Bersihkan</button>
+            </div>
+          </form>
+
+          <div class="scene-list" id="sceneList"></div>
+        </section>
+
+        <section class="card panel" aria-labelledby="validator-title">
+          <div class="section-header">
+            <h2 id="validator-title">Consistency Validator</h2>
+            <button class="btn primary" id="validateBtn">Run Validation</button>
+          </div>
+          <div class="validator-output" id="validatorOutput"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" aria-live="polite"></div>
+
+    <script>
+      (function () {
+        const STORAGE_KEY = 'aicrativeProjectV1';
+
+        const demoProject = {
+          projectName: 'AICRATIVE MVP V1',
+          character: {
+            name: 'Ari Sunarya',
+            role: 'Pahlawan muda desa',
+            age: '19',
+            traits: 'ramah, tangguh, berdamai, penasaran',
+            appearance: 'Tinggi sedang, rambut hitam pendek, mata cokelat hangat, pakaian desa yang nyaman, dengan mantel cokelat tua dan sarung tangan sederhana.',
+            notes: 'Ari adalah sosok yang selalu menolong orang lain, namun juga memikul rasa bertanggung jawab besar atas masa depan desanya.'
+          },
+          style: {
+            mood: 'hangat, heroik, optimistis',
+            palette: 'kuning emas, cerah, biru langit, tanah cokelat',
+            typography: 'clean modern serif, bold headings',
+            lighting: 'soft golden hour, volumetric glow',
+            materials: 'Permukaan alami, tekstur kain, detail ringan pada lingkungan, fokus pada ekspresi karakter dan kedalaman pencahayaan cinematic.'
+          },
+          generated: { image: '', video: '' },
+          scenes: [
+            { id: 1, title: 'Pintu Desa', location: 'Desa Lembah Hijau', mood: 'Senang dan optimistis', shot: 'Wide cinematic', description: 'Ari berjalan di jalan desa saat matahari terbit, menyapa warga dan menyiapkan langkah petualangannya.', prompt: 'Ari berjalan di jalan desa saat pagi, pose tenang dan penuh harapan, atmosfer hangat, wide cinematic shot, gaya 3D animation.' },
+            { id: 2, title: 'Tebing Bunga', location: 'Tebing bukit dengan bunga melati', mood: 'Khusuk dan penuh tekad', shot: 'Medium tracking', description: 'Ari berhenti di tebing untuk mengamati pemandangan, menimbang keputusan besar yang akan membawa perubahan.', prompt: 'Ari berdiri di tebing dengan bunga melati, ekspresi tenang namun bersiap, medium tracking shot, soft golden hour, cinematic fantasy.' },
+            { id: 3, title: 'Rasa Percaya Diri', location: 'Sore hari di jalan utama desa', mood: 'Heroik dan energik', shot: 'Close-up motion', description: 'Ari berlari dengan keyakinan menghadapi hari baru, menempatkan dirinya sebagai pendukung desa yang kuat.', prompt: 'Ari berlari di jalan utama desa dengan wajah penuh semangat, close-up motion, cinematic lighting, heroism with warm palette.' }
+          ]
+        };
+
+        let state = loadProject();
+
+        function deepClone(value) { return JSON.parse(JSON.stringify(value)); }
+
+        function loadProject() {
+          try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return deepClone(demoProject);
+            const parsed = JSON.parse(raw);
+            if (!parsed || !parsed.scenes) return deepClone(demoProject);
+            return parsed;
+          } catch (error) {
+            console.warn('Unable to load project from localStorage:', error);
+            return deepClone(demoProject);
+          }
+        }
+
+        function persistProject() {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+          catch (error) { console.error('Unable to save project to localStorage:', error); }
+        }
+
+        function showToast(message) {
+          const toast = document.getElementById('toast');
+          toast.textContent = message;
+          toast.classList.add('visible');
+          clearTimeout(showToast.timeoutId);
+          showToast.timeoutId = setTimeout(() => toast.classList.remove('visible'), 1800);
+        }
+        function setText(id, value) {
+          const element = document.getElementById(id);
+          if (element) element.value = value;
+        }
+        function getValue(id) {
+          const element = document.getElementById(id);
+          return element ? element.value.trim() : '';
+        }
+
+        function updateDashboard() {
+          document.getElementById('projectNameLabel').textContent = state.projectName || 'Creative Studio MVP';
+          document.getElementById('statProject').textContent = state.projectName || 'AICRATIVE';
+          document.getElementById('statCharacter').textContent = state.character && state.character.name ? '1' : '0';
+          document.getElementById('statScene').textContent = String(state.scenes ? state.scenes.length : 0);
+          const issues = collectValidationIssues();
+          const status = issues.length === 0 ? 'Ready' : issues.length > 2 ? 'Needs Review' : 'Draft';
+          document.getElementById('statStatus').textContent = status;
+        }
+
+        function populateForms() {
+          if (!state.character) state.character = deepClone(demoProject.character);
+          if (!state.style) state.style = deepClone(demoProject.style);
+          if (!state.scenes || !state.scenes.length) state.scenes = deepClone(demoProject.scenes);
+          if (!state.generated) state.generated = { image: '', video: '' };
+
+          setText('characterName', state.character.name || '');
+          setText('characterRole', state.character.role || '');
+          setText('characterAge', state.character.age || '');
+          setText('characterTraits', state.character.traits || '');
+          setText('characterAppearance', state.character.appearance || '');
+          setText('characterNotes', state.character.notes || '');
+
+          setText('styleMood', state.style.mood || '');
+          setText('stylePalette', state.style.palette || '');
+          setText('styleTypography', state.style.typography || '');
+          setText('styleLighting', state.style.lighting || '');
+          setText('styleMaterials', state.style.materials || '');
+
+          renderScenes();
+          renderGeneratedPrompts();
+          updateDashboard();
+        }
+
+        function buildImagePrompt() {
+          const style = getValue('imageStyle');
+          const subject = getValue('imageSubject') || 'tokoh utama';
+          const custom = getValue('imageCustom');
+          const charName = state.character && state.character.name ? state.character.name : 'tokoh utama';
+          const scene = state.scenes && state.scenes.length ? state.scenes[0] : null;
+          const location = scene ? scene.location : 'lingkungan yang memikat';
+          const mood = state.style && state.style.mood ? state.style.mood : 'hangat';
+          const lighting = state.style && state.style.lighting ? state.style.lighting : 'soft cinematic light';
+          const styleText = style === 'custom' && custom ? custom : style;
+
+          return [
+            `A highly detailed ${styleText} illustration of ${subject}`,
+            `featuring ${charName} in ${location}`,
+            `with ${state.character && state.character.traits ? state.character.traits : 'expressive and resilient personality'}`,
+            `mood: ${mood}`,
+            `lighting: ${lighting}`,
+            'composition: cinematic, storytelling, strong focal point, layered depth, rich detail',
+            'quality: polished, visually coherent, premium concept art, suitable for GPT image generation'
+          ].join(', ');
+        }
+
+        function buildVideoPrompt() {
+          const action = getValue('videoAction') || 'bergerak dengan percaya diri';
+          const expression = getValue('videoExpression') || 'tenang dan fokus';
+          const camera = getValue('videoCamera') || 'tracking shot';
+          const duration = getValue('videoDuration') || '8 detik';
+          const lighting = getValue('videoLighting') || 'golden hour';
+          const continuity = getValue('videoContinuity') || 'consistent motion and emotional continuity';
+          const charName = state.character && state.character.name ? state.character.name : 'tokoh utama';
+
+          return [
+            `Create a short cinematic video of ${charName} ${action}.`,
+            `Expression: ${expression}.`,
+            `Camera: ${camera}.`,
+            `Duration: ${duration}.`,
+            `Lighting: ${lighting}.`,
+            `Continuity: ${continuity}.`,
+            'Keep visual consistency across frames, natural motion, clear storytelling arc, and high-quality cinematic pacing.'
+          ].join(' ');
+        }
+
+        function renderGeneratedPrompts() {
+          if (!state.generated) state.generated = { image: '', video: '' };
+          if (!state.generated.image) state.generated.image = buildImagePrompt();
+          if (!state.generated.video) state.generated.video = buildVideoPrompt();
+          document.getElementById('imagePromptOutput').textContent = state.generated.image;
+          document.getElementById('videoPromptOutput').textContent = state.generated.video;
+        }
+
+        function refreshGeneratedPromptOutputs() {
+          state.generated = {
+            image: buildImagePrompt(),
+            video: buildVideoPrompt()
+          };
+          document.getElementById('imagePromptOutput').textContent = state.generated.image;
+          document.getElementById('videoPromptOutput').textContent = state.generated.video;
+        }
+
+        function updateCharacterFromForm() {
+          state.character = {
+            name: getValue('characterName'),
+            role: getValue('characterRole'),
+            age: getValue('characterAge'),
+            traits: getValue('characterTraits'),
+            appearance: getValue('characterAppearance'),
+            notes: getValue('characterNotes')
+          };
+          persistProject();
+          updateDashboard();
+          showToast('Karakter disimpan');
+        }
+
+        function updateStyleFromForm() {
+          state.style = {
+            mood: getValue('styleMood'),
+            palette: getValue('stylePalette'),
+            typography: getValue('styleTypography'),
+            lighting: getValue('styleLighting'),
+            materials: getValue('styleMaterials')
+          };
+          persistProject();
+          showToast('Style disimpan');
+        }
+
+        function escapeHtml(text) {
+          const value = String(text ?? '');
+          return value
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+        }
+
+        function renderScenes() {
+          const list = document.getElementById('sceneList');
+          if (!state.scenes || !state.scenes.length) {
+            list.innerHTML = '<div class="empty-state">Belum ada scene. Tambahkan scene baru untuk mulai membangun dunia visual.</div>';
+            return;
+          }
+
+          list.innerHTML = state.scenes.map((scene, index) => `
+            <div class="scene-item">
+              <div>
+                <h3>${escapeHtml(scene.title || 'Scene ' + (index + 1))}</h3>
+                <div class="scene-meta">
+                  <span class="chip">${escapeHtml(scene.location || 'Lokasi belum diisi')}</span>
+                  <span class="chip">${escapeHtml(scene.mood || 'Mood belum diisi')}</span>
+                  <span class="chip">${escapeHtml(scene.shot || 'Shot belum diisi')}</span>
+                </div>
+                <div class="muted">${escapeHtml(scene.description || 'Deskripsi belum diisi')}</div>
+                <div class="muted" style="margin-top:8px;">Prompt: ${escapeHtml(scene.prompt || 'Prompt belum diisi')}</div>
+              </div>
+              <div class="scene-actions">
+                <button type="button" class="btn tiny" data-scene-action="up" data-scene-index="${index}">↑</button>
+                <button type="button" class="btn tiny" data-scene-action="down" data-scene-index="${index}">↓</button>
+                <button type="button" class="btn tiny" data-scene-action="edit" data-scene-index="${index}">Edit</button>
+                <button type="button" class="btn tiny danger" data-scene-action="delete" data-scene-index="${index}">Hapus</button>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        function fillSceneForm(scene, index) {
+          document.getElementById('sceneTitle').value = scene.title || '';
+          document.getElementById('sceneLocation').value = scene.location || '';
+          document.getElementById('sceneMood').value = scene.mood || '';
+          document.getElementById('sceneShot').value = scene.shot || '';
+          document.getElementById('sceneDescription').value = scene.description || '';
+          document.getElementById('scenePrompt').value = scene.prompt || '';
+          document.getElementById('sceneForm').dataset.editIndex = String(index);
+        }
+
+        function createSceneObjectFromForm() {
+          return {
+            id: Date.now() + Math.floor(Math.random() * 1000),
+            title: getValue('sceneTitle') || 'Scene Baru',
+            location: getValue('sceneLocation') || 'Lokasi belum diisi',
+            mood: getValue('sceneMood') || 'Mood belum diisi',
+            shot: getValue('sceneShot') || 'Shot belum diisi',
+            description: getValue('sceneDescription') || 'Deskripsi belum diisi',
+            prompt: getValue('scenePrompt') || 'Prompt belum diisi'
+          };
+        }
+
+        function clearSceneForm() {
+          document.getElementById('sceneForm').reset();
+          delete document.getElementById('sceneForm').dataset.editIndex;
+        }
+
+        function saveSceneFromForm(event) {
+          event.preventDefault();
+          const form = document.getElementById('sceneForm');
+          const indexValue = form.dataset.editIndex;
+          const sceneData = createSceneObjectFromForm();
+
+          if (indexValue !== undefined && indexValue !== '' && !Number.isNaN(Number(indexValue))) {
+            state.scenes[Number(indexValue)] = sceneData;
+            showToast('Scene diperbarui');
+          } else {
+            state.scenes.push(sceneData);
+            showToast('Scene ditambahkan');
+          }
+
+          persistProject();
+          renderScenes();
+          updateDashboard();
+          clearSceneForm();
+          runValidation();
+        }
+
+        function handleSceneActions(event) {
+          const button = event.target.closest('[data-scene-action]');
+          if (!button) return;
+          const action = button.dataset.sceneAction;
+          const index = Number(button.dataset.sceneIndex);
+          if (Number.isNaN(index) || !state.scenes[index]) return;
+
+          if (action === 'edit') {
+            fillSceneForm(state.scenes[index], index);
+            showToast('Scene siap diedit');
+          }
+
+          if (action === 'delete') {
+            state.scenes.splice(index, 1);
+            persistProject();
+            renderScenes();
+            updateDashboard();
+            runValidation();
+            showToast('Scene dihapus');
+          }
+
+          if (action === 'up' && index > 0) {
+            [state.scenes[index - 1], state.scenes[index]] = [state.scenes[index], state.scenes[index - 1]];
+            persistProject();
+            renderScenes();
+            updateDashboard();
+            showToast('Scene diurutkan');
+          }
+
+          if (action === 'down' && index < state.scenes.length - 1) {
+            [state.scenes[index], state.scenes[index + 1]] = [state.scenes[index + 1], state.scenes[index]];
+            persistProject();
+            renderScenes();
+            updateDashboard();
+            showToast('Scene diurutkan');
+          }
+        }
+
+        function collectValidationIssues() {
+          const issues = [];
+          if (!state.character || !state.character.name) issues.push('Karakter utama belum diisi');
+          if (!state.style || !state.style.mood) issues.push('Style bible belum diisi');
+          if (!state.scenes || state.scenes.length < 3) issues.push('Minimal 3 scene dibutuhkan untuk MVP');
+          if (state.scenes && state.scenes.some(scene => !scene.title || !scene.prompt)) issues.push('Ada scene dengan judul atau prompt yang belum lengkap');
+          if (!state.generated || !state.generated.image || !state.generated.video) issues.push('Prompt gambar/video belum dihasilkan');
+          return issues;
+        }
+
+        function runValidation() {
+          const issues = collectValidationIssues();
+          const container = document.getElementById('validatorOutput');
+          if (!issues.length) {
+            container.innerHTML = `
+              <div class="validator-result good">
+                <div class="status">Status: Lulus validasi</div>
+                <ul class="validator-list">
+                  <li>Karakter utama terdefinisi.</li>
+                  <li>Style bible konsisten dengan mood proyek.</li>
+                  <li>${state.scenes ? state.scenes.length : 0} scene ditemukan dan siap digunakan.</li>
+                  <li>Prompt gambar dan video siap dikopi atau diekspor.</li>
+                </ul>
+              </div>
+            `;
+            return;
+          }
+
+          container.innerHTML = `
+            <div class="validator-result warn">
+              <div class="status">Status: Butuh perbaikan</div>
+              <ul class="validator-list">
+                ${issues.map(issue => `<li>${escapeHtml(issue)}</li>`).join('')}
+              </ul>
+            </div>
+          `;
+        }
+
+        function downloadJson() {
+          const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'aicrative-project.json';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+          showToast('JSON berhasil diekspor');
+        }
+
+        async function copyToClipboard(value, message) {
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(value);
+            } else {
+              const helper = document.createElement('textarea');
+              helper.value = value;
+              document.body.appendChild(helper);
+              helper.select();
+              document.execCommand('copy');
+              helper.remove();
+            }
+            showToast(message);
+          } catch (error) {
+            console.error('Clipboard error:', error);
+            showToast('Gagal menyalin ke clipboard');
+          }
+        }
+
+        function bindEvents() {
+          document.getElementById('saveProjectBtn').addEventListener('click', () => { persistProject(); showToast('Proyek tersimpan'); });
+          document.getElementById('resetProjectBtn').addEventListener('click', () => {
+            state = deepClone(demoProject);
+            persistProject();
+            populateForms();
+            clearSceneForm();
+            runValidation();
+            showToast('Demo telah direset');
+          });
+          document.getElementById('exportJsonBtn').addEventListener('click', downloadJson);
+          document.getElementById('generateImageBtn').addEventListener('click', () => {
+            state.generated.image = buildImagePrompt();
+            document.getElementById('imagePromptOutput').textContent = state.generated.image;
+            persistProject();
+            showToast('Prompt gambar dibuat');
+          });
+          document.getElementById('copyImageBtn').addEventListener('click', () => copyToClipboard(state.generated.image || buildImagePrompt(), 'Prompt gambar disalin'));
+          document.getElementById('generateVideoBtn').addEventListener('click', () => {
+            state.generated.video = buildVideoPrompt();
+            document.getElementById('videoPromptOutput').textContent = state.generated.video;
+            persistProject();
+            showToast('Prompt video dibuat');
+          });
+          document.getElementById('copyVideoBtn').addEventListener('click', () => copyToClipboard(state.generated.video || buildVideoPrompt(), 'Prompt video disalin'));
+          document.getElementById('saveCharacterBtn').addEventListener('click', updateCharacterFromForm);
+          document.getElementById('saveStyleBtn').addEventListener('click', updateStyleFromForm);
+          document.getElementById('addSceneBtn').addEventListener('click', () => { clearSceneForm(); showToast('Form scene siap diisi'); });
+          document.getElementById('sceneForm').addEventListener('submit', saveSceneFromForm);
+          document.getElementById('clearSceneBtn').addEventListener('click', clearSceneForm);
+          document.getElementById('sceneList').addEventListener('click', handleSceneActions);
+          document.getElementById('validateBtn').addEventListener('click', runValidation);
+
+          ['imageStyle', 'imageSubject', 'imageCustom', 'videoAction', 'videoExpression', 'videoCamera', 'videoDuration', 'videoLighting', 'videoContinuity'].forEach(id => {
+            const element = document.getElementById(id);
+            if (element) element.addEventListener('input', refreshGeneratedPromptOutputs);
+          });
+        }
+
+        function init() {
+          populateForms();
+          bindEvents();
+          runValidation();
+          document.getElementById('imagePromptOutput').textContent = state.generated.image || buildImagePrompt();
+          document.getElementById('videoPromptOutput').textContent = state.generated.video || buildVideoPrompt();
+        }
+
+        init();
+      })();
+    </script>
+  </body>
+</html>
