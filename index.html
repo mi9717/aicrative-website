@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AICRATIVE — solusi kreatif digital, prompt AI, dan template untuk membantu kreator berkarya.">
+  <title>AICRATIVE — Create More With AI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #0b0d12;
+      color: #f5f6fa;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1080px, 90%); margin: auto; }
+    header {
+      border-bottom: 1px solid #252832;
+      background: #0b0d12;
+    }
+    nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .logo { font-size: 24px; font-weight: 800; letter-spacing: 2px; }
+    .logo span { color: #9b8cff; }
+    .nav-links { display: flex; gap: 24px; color: #c1c4d0; font-size: 14px; }
+    .button {
+      display: inline-block;
+      background: #9b8cff;
+      color: #101019;
+      padding: 12px 20px;
+      border-radius: 9px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+    .hero { padding: 100px 0 85px; text-align: center; }
+    .tag {
+      display: inline-block;
+      border: 1px solid #45405f;
+      color: #c7bdff;
+      background: #171522;
+      padding: 7px 13px;
+      border-radius: 30px;
+      font-size: 12px;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: clamp(38px, 7vw, 68px);
+      line-height: 1.08;
+      letter-spacing: -2px;
+      max-width: 850px;
+      margin: 0 auto 22px;
+    }
+    h1 span {
+      background: linear-gradient(90deg, #b8aaff, #78d9d2);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p { color: #a9adba; max-width: 620px; margin: 0 auto 30px; }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .button-outline {
+      display: inline-block;
+      border: 1px solid #363947;
+      padding: 11px 19px;
+      border-radius: 9px;
+      color: #f5f6fa;
+    }
+    .section { padding: 65px 0; }
+    .section-title { text-align: center; font-size: 32px; margin-bottom: 12px; }
+    .section-desc { text-align: center; color: #a9adba; margin-bottom: 35px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card {
+      background: #12151d;
+      border: 1px solid #292d39;
+      padding: 25px;
+      border-radius: 15px;
+    }
+    .card-icon { font-size: 29px; margin-bottom: 15px; }
+    .card h3 { margin-bottom: 9px; font-size: 19px; }
+    .card p { color: #a9adba; font-size: 14px; margin-bottom: 18px; }
+    .card a { color: #b8aaff; font-weight: 700; font-size: 14px; }
+    .cta {
+      text-align: center;
+      padding: 48px 24px;
+      background: linear-gradient(135deg, #19172a, #142326);
+      border: 1px solid #343449;
+      border-radius: 18px;
+    }
+    .cta h2 { font-size: 30px; margin-bottom: 12px; }
+    .cta p { color: #b4b7c4; margin-bottom: 24px; }
+    footer {
+      margin-top: 65px;
+      padding: 28px 0;
+      border-top: 1px solid #252832;
+      color: #9296a5;
+      font-size: 13px;
+    }
+    .footer-inner { display: flex; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .grid { grid-template-columns: 1fr; }
+      .hero { padding: 70px 0 55px; }
+      .section { padding: 45px 0; }
+      h1 { letter-spacing: -1px; }
+      .cta h2 { font-size: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <a class="logo" href="#">AI<span>CRATIVE.</span></a>
+      <div class="nav-links">
+        <a href="#beranda">Beranda</a>
+        <a href="#layanan">Layanan</a>
+        <a href="#tentang">Tentang</a>
+      </div>
+      <a class="button" href="#layanan">Jelajahi</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container" id="beranda">
+      <div class="tag">✦ CREATIVE DIGITAL SOLUTIONS</div>
+      <h1>Ubah Ide Menjadi <span>Karya Digital.</span></h1>
+      <p>
+        Temukan prompt AI, template kreatif, dan solusi digital
+        untuk membantu kreator bekerja lebih cerdas dan berkarya lebih cepat.
+      </p>
+      <div class="hero-actions">
+        <a class="button" href="#layanan">Jelajahi Produk</a>
+        <a class="button-outline" href="#tentang">Kenali AICRATIVE</a>
+      </div>
+    </section>
+
+    <section class="section container" id="layanan">
+      <h2 class="section-title">Solusi Kreatif untuk Kamu</h2>
+      <p class="section-desc">Mulai kembangkan ide dengan perangkat digital yang tepat.</p>
+      <div class="grid">
+        <article class="card">
+          <div class="card-icon">✳️</div>
+          <h3>Prompt AI</h3>
+          <p>Kumpulan prompt untuk membantu menghasilkan ide, konten, gambar, dan video menggunakan AI.</p>
+          <a href="#kontak">Lihat selengkapnya →</a>
+        </article>
+        <article class="card">
+          <div class="card-icon">▧</div>
+          <h3>Template Digital</h3>
+          <p>Template praktis untuk mempercepat proses pembuatan konten dan kebutuhan kreatif.</p>
+          <a href="#kontak">Lihat selengkapnya →</a>
+        </article>
+        <article class="card">
+          <div class="card-icon">✦</div>
+          <h3>Jasa Kreatif</h3>
+          <p>Solusi kreatif untuk membantu kebutuhan desain, konten, dan pengembangan ide digital.</p>
+          <a href="#kontak">Lihat selengkapnya →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section container" id="tentang">
+      <div class="cta">
+        <h2>Siap Mewujudkan Ide Kamu?</h2>
+        <p>Hubungi AICRATIVE untuk informasi produk dan layanan digital.</p>
+        <a class="button" href="#kontak">Hubungi Kami</a>
+      </div>
+    </section>
+
+    <section class="container" id="kontak">
+      <div class="card" style="text-align:center">
+        <h2>Terhubung dengan AICRATIVE</h2>
+        <p style="color:#a9adba;margin:12px 0 20px">
+          Informasi pembelian dan konsultasi akan tersedia di sini.
+        </p>
+        <p style="color:#9b8cff">Kontak WhatsApp akan ditambahkan setelah nomor kamu siap.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>© 2026 AICRATIVE. All rights reserved.</span>
+      <span>Create more. Create smarter.</span>
+    </div>
+  </footer>
+</body>
+</html>
